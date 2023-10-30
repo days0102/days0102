@@ -4,6 +4,4 @@
 ​ <img height="150px" src="https://github-readme-stats.vercel.app/api?username=days0102&count_private=true&show_icons=true" />  
 ​</div>
 
-[![Ashutosh's github activity graph](https://github-readme-activity-graph.cyclic.app/graph?username=days0102&theme=github)](https://github.com/ashutosh00710/github-readme-activity-graph)
-
 ​
