@@ -69,7 +69,7 @@ jobs:
       - name: Full-year calendar
         uses: lowlighter/metrics@latest
         with:
-          filename: github-metrics/isocalendar.fullyear.svg
+          filename: metrics/isocalendar.fullyear.svg
           token: ${{ secrets.METRICS_TOKEN }}
           # 不添加基础信息
           base: ""
