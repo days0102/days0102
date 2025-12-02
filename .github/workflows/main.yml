@@ -238,3 +238,12 @@ jobs:
           plugin_stackoverflow_user: 1
           plugin_stackoverflow_sections: answers-top
           plugin_stackoverflow_limit: 2
+          
+      - name: Opened by user
+        uses: lowlighter/metrics@latest
+        with:
+          filename: metrics/followup.user.svg
+          token: ${{ secrets.METRICS_TOKEN }}
+          base: ""
+          plugin_followup: yes
+          plugin_followup_sections: user
