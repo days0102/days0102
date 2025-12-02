@@ -26,15 +26,15 @@
 
 <table>
   <tr>
-    <td><img src="metrics/followup.indepth.svg" alt="followup.indepth" /></td>
-    <td><img src="metrics/habits.charts.svg" alt="habits.charts" /></td>
+    <td><img src="metrics/followup.user.svg" alt="followup.indepth" /></td>
+    <td><img src="metrics/languages.indepth.svg" alt="languages.indepth" /></td>
   </tr>
   <tr>
     <td><img src="metrics/isocalendar.fullyear.svg" alt="isocalendar.fullyear" /></td>
     <td><img src="metrics/calendar.full.svg" alt="calendar.full" /></td>
   </tr>
   <tr>
-    <td><img src="metrics/languages.indepth.svg" alt="languages.indepth" /></td>
+    <td><img src="metrics/habits.charts.svg" alt="habits.charts" /></td>
     <td><img src="metrics/activity.svg" alt="activity" /></td>
   </tr>
 </table>
