@@ -14,10 +14,6 @@ jobs:
     permissions:
       contents: write
     steps:
-      # Checkout the repository to the runner workspace
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
       - name: base
         uses: lowlighter/metrics@latest
         with:
@@ -253,17 +249,6 @@ jobs:
           base: ""
           plugin_followup: yes
           plugin_followup_sections: user
-
-      - name: Debug - Check what changed
-        run: |
-          echo "=== 检查 metrics 文件夹内容 ==="
-          ls -la metrics/ || echo "文件夹不存在！"
-          
-          echo "=== 检查 Git 状态 ==="
-          git status
-          
-          echo "=== 检查具体的 Diff ==="
-          git diff
 
       # Commit all generated SVGs in a single commit
       - name: Commit and push metrics
