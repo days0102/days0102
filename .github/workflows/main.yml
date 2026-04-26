@@ -1,46 +1,53 @@
-# Visit https://github.com/lowlighter/metrics#-documentation for full reference
 name: Metrics
+
 on:
   # Schedule updates (each 18 hours)
   schedule: [{cron: "0 */18 * * *"}]
-  # Lines below let you run workflow manually and on each commit
   workflow_dispatch:
   push: {branches: ["master", "main"]}
+
 jobs:
   github-metrics:
     runs-on: ubuntu-latest
-    environment: 
+
+    environment:
       name: production
+
     permissions:
       contents: write
+
     steps:
-      # Step 1: Checkout the repository so files can be saved locally
+      # Step 1: Checkout repository (必须加 token，否则 push 可能失败)
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.METRICS_TOKEN }}
 
       - name: base
         uses: lowlighter/metrics@latest
         with:
           filename: metrics/base.svg
           token: ${{ secrets.METRICS_TOKEN }}
-          # Prevent individual commit
-          output_action: none
-          # Options
+          commit: false   # ✅ 修正点1：替换 output_action
           user: days0102
           template: classic
           base: header, activity, community, repositories, metadata
           config_timezone: Asia/Shanghai
+
           plugin_activity: yes
           plugin_activity_days: 14
           plugin_activity_filter: all
           plugin_activity_limit: 5
           plugin_activity_load: 300
           plugin_activity_visibility: all
+
           plugin_calendar: yes
           plugin_calendar_limit: 1
+
           plugin_followup: yes
           plugin_followup_archived: yes
           plugin_followup_sections: repositories
+
           plugin_habits: yes
           plugin_habits_charts_type: classic
           plugin_habits_days: 14
@@ -48,8 +55,10 @@ jobs:
           plugin_habits_from: 200
           plugin_habits_languages_limit: 8
           plugin_habits_languages_threshold: 0%
+
           plugin_isocalendar: yes
           plugin_isocalendar_duration: half-year
+
           plugin_languages: yes
           plugin_languages_analysis_timeout: 15
           plugin_languages_analysis_timeout_repositories: 7.5
@@ -62,31 +71,26 @@ jobs:
           plugin_languages_sections: most-used
           plugin_languages_threshold: 0%
 
-      # 📅 Isometric commit calendar
+      # 📅 Full-year calendar
       - name: Full-year calendar
         uses: lowlighter/metrics@latest
         with:
           filename: metrics/isocalendar.fullyear.svg
           token: ${{ secrets.METRICS_TOKEN }}
-          output_action: none
-          # Do not add base info
+          commit: false
           base: ""
-          # Use this plugin
           plugin_isocalendar: yes
-          # Set to display full year
           plugin_isocalendar_duration: full-year
 
+      # 📅 Half-year calendar
       - name: half-year calendar
         uses: lowlighter/metrics@latest
         with:
           filename: metrics/isocalendar.halfyear.svg
           token: ${{ secrets.METRICS_TOKEN }}
-          output_action: none
-          # Do not add base info
+          commit: false
           base: ""
-          # Use this plugin
           plugin_isocalendar: yes
-          # Set to display half year
           plugin_isocalendar_duration: half-year
 
       # 🈷️ Languages activity
@@ -95,7 +99,7 @@ jobs:
         with:
           filename: metrics/languages.indepth.svg
           token: ${{ secrets.METRICS_TOKEN }}
-          output_action: none
+          commit: false
           base: ""
           plugin_languages: yes
           plugin_languages_indepth: yes
@@ -109,7 +113,7 @@ jobs:
         with:
           filename: metrics/stargazers.chartist.svg
           token: ${{ secrets.METRICS_TOKEN }}
-          output_action: none
+          commit: false
           base: ""
           plugin_stargazers: yes
           plugin_stargazers_charts_type: chartist
@@ -120,31 +124,31 @@ jobs:
         with:
           filename: metrics/stars.svg
           token: ${{ secrets.METRICS_TOKEN }}
-          output_action: none
+          commit: false
           base: ""
           plugin_stars: yes
           plugin_stars_limit: 10
 
-      # 💡 Coding habits and activity
+      # 💡 Coding habits
       - name: Recent activity charts
         uses: lowlighter/metrics@latest
         with:
           filename: metrics/habits.charts.svg
           token: ${{ secrets.METRICS_TOKEN }}
-          output_action: none
+          commit: false
           base: ""
           plugin_habits: yes
           plugin_habits_facts: no
           plugin_habits_charts: yes
           config_timezone: Europe/Paris
 
-      # 🎟️ Follow-up of issues and pull requests
-      - name: Indepth analysis
+      # 🎟️ Follow-up indepth
+      - name: Indepth analysis followup
         uses: lowlighter/metrics@latest
         with:
           filename: metrics/followup.indepth.svg
           token: ${{ secrets.METRICS_TOKEN }}
-          output_action: none
+          commit: false
           base: ""
           plugin_followup: yes
           plugin_followup_indepth: yes
@@ -155,7 +159,7 @@ jobs:
         with:
           filename: metrics/reactions.svg
           token: ${{ secrets.METRICS_TOKEN }}
-          output_action: none
+          commit: false
           base: ""
           plugin_reactions: yes
           plugin_reactions_limit: 100
@@ -167,20 +171,20 @@ jobs:
         with:
           filename: metrics/people.followers.svg
           token: ${{ secrets.METRICS_TOKEN }}
-          output_action: none
+          commit: false
           base: ""
           plugin_people: yes
           plugin_people_limit: 300
           plugin_people_size: 36
           plugin_people_types: followers, following
 
-      # 📓 Featured repositories
+      # 📓 Pinned repositories
       - name: Pinned repositories
         uses: lowlighter/metrics@latest
         with:
           filename: metrics/repositories.pinned.svg
           token: ${{ secrets.METRICS_TOKEN }}
-          output_action: none
+          commit: false
           base: ""
           plugin_repositories: yes
           plugin_repositories_pinned: 2
@@ -191,18 +195,18 @@ jobs:
         with:
           filename: metrics/discussions.svg
           token: ${{ secrets.METRICS_TOKEN }}
-          output_action: none
+          commit: false
           base: ""
           plugin_discussions: yes
           plugin_discussions_categories_limit: 8
 
-      # 📆 Commit calendar
+      # 📆 Calendar full history
       - name: Full history calendar
         uses: lowlighter/metrics@latest
         with:
           filename: metrics/calendar.full.svg
           token: ${{ secrets.METRICS_TOKEN }}
-          output_action: none
+          commit: false
           base: ""
           plugin_calendar: yes
           plugin_calendar_limit: 0
@@ -213,7 +217,7 @@ jobs:
         with:
           filename: metrics/achievements.compact.svg
           token: ${{ secrets.METRICS_TOKEN }}
-          output_action: none
+          commit: false
           base: ""
           plugin_achievements: yes
           plugin_achievements_only: >-
@@ -222,13 +226,13 @@ jobs:
           plugin_achievements_display: compact
           plugin_achievements_threshold: X
 
-      # 📰 Recent activity
+      # 📰 Activity
       - name: Recent activity
         uses: lowlighter/metrics@latest
         with:
           filename: metrics/activity.svg
           token: ${{ secrets.METRICS_TOKEN }}
-          output_action: none
+          commit: false
           base: ""
           plugin_activity: yes
           plugin_activity_limit: 5
@@ -236,39 +240,46 @@ jobs:
           plugin_activity_filter: issue, pr, release, fork, review, ref/create
 
       # 🗨️ Stack Overflow
-      - name: Top answers from stackoverflow
+      - name: StackOverflow
         uses: lowlighter/metrics@latest
         with:
           filename: metrics/stackoverflow.svg
           token: NOT_NEEDED
-          output_action: none
+          commit: false
           base: ""
           plugin_stackoverflow: yes
           plugin_stackoverflow_user: 1
           plugin_stackoverflow_sections: answers-top
           plugin_stackoverflow_limit: 2
-          
-      - name: Opened by user
+
+      # 👤 User followup
+      - name: Followup user
         uses: lowlighter/metrics@latest
         with:
           filename: metrics/followup.user.svg
           token: ${{ secrets.METRICS_TOKEN }}
-          output_action: none
+          commit: false
           base: ""
           plugin_followup: yes
           plugin_followup_sections: user
 
+      # 🧪 Debug
+      - name: Debug files
+        run: |
+          echo "==== FILE TREE ===="
+          ls -R
+
+      # ✅ Single commit step
       - name: Native Git Commit and Push
         run: |
-          # 配置机器人账号信息
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          
-          # 强行将 metrics 文件夹下的所有变动加入暂存区
+
           git add metrics/
-          
-          # 尝试提交，如果 Git 依然报错说没变，就打印提示且不中断执行
-          git commit -m "chore: update GitHub metrics [skip ci]" || echo "Git 依然认为没有任何内容发生变化"
-          
-          # 推送到 GitHub
-          git push
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore: update GitHub metrics [skip ci]"
+            git push
+          fi
