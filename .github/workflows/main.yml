@@ -269,20 +269,25 @@ jobs:
 
       - name: Copy rendered metrics
         shell: bash
+        env:
+          SOURCE_DIR: /metrics_renders/metrics
+          TARGET_DIR: metrics
         run: |
           set -euo pipefail
 
-          if [ ! -d /metrics_renders/metrics ]; then
-            echo "/metrics_renders/metrics not found"
+          if [[ ! -d "$SOURCE_DIR" ]]; then
+            echo "Metrics source directory not found: $SOURCE_DIR"
             exit 1
           fi
 
-          mkdir -p metrics
+          mkdir -p "$TARGET_DIR"
 
-          # Sync all rendered metrics into repository workspace
-          sudo rsync -a --delete --chown="$(id -u):$(id -g)" /metrics_renders/metrics/ metrics/
+          sudo rsync -a \
+            --chown="$(id -u):$(id -g)" \
+            "$SOURCE_DIR/" \
+            "$TARGET_DIR/"
 
-      - name: Commit all metrics at once
+      - name: Commit metrics
         uses: iarekylew00t/verified-bot-commit@v2
         with:
           message: "chore: update metrics [skip ci]"
