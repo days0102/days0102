@@ -267,26 +267,25 @@ jobs:
           plugin_followup: yes
           plugin_followup_sections: user
 
-      - name: Commit all metrics at once
+      - name: Copy rendered metrics
         shell: bash
         run: |
           set -euo pipefail
 
-          if [ ! -d /metrics_renders ]; then
-            echo "/metrics_renders not found"
+          if [ ! -d /metrics_renders/metrics ]; then
+            echo "/metrics_renders/metrics not found"
             exit 1
           fi
 
-          sudo rsync -a --chown="$(id -u):$(id -g)" /metrics_renders/ ./
+          mkdir -p metrics
 
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # Sync all rendered metrics into repository workspace
+          sudo rsync -a --delete --chown="$(id -u):$(id -g)" /metrics_renders/metrics/ metrics/
 
-          git add -A metrics/
-
-          if git diff --cached --quiet; then
-            echo "No metrics changes to commit."
-          else
-            git commit -m "chore: update metrics [skip ci]"
-            git push origin "HEAD:${GITHUB_REF_NAME}"
-          fi
+      - name: Commit all metrics at once
+        uses: iarekylew00t/verified-bot-commit@v2
+        with:
+          message: "chore: update metrics [skip ci]"
+          files: |
+            metrics/**
+          if-no-commit: info
